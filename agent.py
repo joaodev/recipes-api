@@ -265,7 +265,7 @@ workflow_agent = _build_workflow_agent()
 
 
 def _extract_pr_number(query: str) -> int | None:
-    match = re.search(r"(?:pull request|pr)\s*(?:number\s*)?#?\s*(\d+)", query, flags=re.IGNORECASE)
+    match = re.search(r"(?:pull request|pr)\s*(?:number\s*)?[:#-]?\s*(\d+)", query, flags=re.IGNORECASE)
     if match:
         return int(match.group(1))
     return None
@@ -576,7 +576,7 @@ async def main() -> None:
     git, repo = _build_github_repo()
 
     pr_number = int(os.getenv("PR_NUMBER", "1"))
-    query = f"Write a review for PR: {pr_number}"
+    query = f"Write a review for PR #{pr_number}"
 
     prompt = RichPromptTemplate(query)
 
