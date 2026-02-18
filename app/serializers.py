@@ -14,6 +14,7 @@ class RecipeRatingSerializer(serializers.ModelSerializer):
 
     # Custom validation to ensure stars is between 1 and 5
     def validate_stars(self, value):
+        # Ensure the rating is between 1 and 5
         if not (1 <= value <= 5):
             raise serializers.ValidationError("Rating must be between 1 and 5.")
         return value
