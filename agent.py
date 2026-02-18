@@ -27,10 +27,12 @@ except Exception:
 """
 Please provide the full URL to your recipes-api GitHub repository below.
 """
-repo_url = "https://github.com/joaodev/recipes-api.git"
+repo_url = os.getenv("GITHUB_REPOSITORY", "joaodev/recipes-api")
 
 
 dotenv.load_dotenv()
+
+pr_number = int(os.getenv("PR_NUMBER", "1"))
 
 
 def _extract_repo_full_name(url: str) -> str:
@@ -569,13 +571,10 @@ async def main() -> None:
     if len(sys.argv) > 1:
         query = " ".join(sys.argv[1:]).strip()
     else:
-        query = os.getenv("AGENT_QUERY", "").strip()
+        query = os.getenv("AGENT_QUERY", f"Write a review for PR number {pr_number}. Remember, the PR number is coming from the environment.").strip()
         if not query:
-            try:
-                query = input().strip()
-            except EOFError:
-                print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
-                return
+            print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
+            return
 
     if not query:
         print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
