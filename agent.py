@@ -27,11 +27,9 @@ except Exception:
 """
 Please provide the full URL to your recipes-api GitHub repository below.
 """
-repo_url = os.getenv("GITHUB_REPOSITORY", "joaodev/recipes-api")
-
 
 dotenv.load_dotenv()
-
+repo_url = os.getenv("REPOSITORY", "joaodev/recipes-api")
 pr_number = int(os.getenv("PR_NUMBER", "1"))
 
 
