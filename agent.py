@@ -1,6 +1,7 @@
 import asyncio
 import os
 import re
+import sys
 from typing import Any
 
 import dotenv
@@ -565,7 +566,21 @@ async def _fallback_run(query: str) -> None:
 
 
 async def main() -> None:
-    query = input().strip()
+    if len(sys.argv) > 1:
+        query = " ".join(sys.argv[1:]).strip()
+    else:
+        query = os.getenv("AGENT_QUERY", "").strip()
+        if not query:
+            try:
+                query = input().strip()
+            except EOFError:
+                print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
+                return
+
+    if not query:
+        print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
+        return
+
     prompt = RichPromptTemplate(query)
 
     use_live_workflow = workflow_agent is not None and os.getenv("ENABLE_LLM_WORKFLOW") == "1"
