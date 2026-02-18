@@ -3,6 +3,7 @@ from django.conf import settings
 
 
 class Recipe(models.Model):
+    # The title of the recipe, e.g., "Spaghetti Carbonara".
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     time_minutes = models.IntegerField()
