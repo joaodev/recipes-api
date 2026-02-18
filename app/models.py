@@ -18,6 +18,7 @@ class RecipeRating(models.Model):
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, related_name="ratings"
     )
+    # The user who rated the recipe. This is a foreign key to the user model defined in settings.AUTH_USER_MODEL.
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )
