@@ -53,7 +53,6 @@ def _build_github_repo() -> tuple[Github, Repository]:
     git_repo = git_client.get_repo(_extract_repo_full_name(repo_url))
     return git_client, git_repo
 
-
 git, repo = _build_github_repo()
 
 
@@ -566,17 +565,18 @@ async def _fallback_run(query: str) -> None:
 
 
 async def main() -> None:
-    if len(sys.argv) > 1:
-        query = " ".join(sys.argv[1:]).strip()
-    else:
-        query = os.getenv("AGENT_QUERY", f"Write a review for PR number {pr_number}. Remember, the PR number is coming from the environment.").strip()
-        if not query:
-            print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
-            return
+    if len(sys.argv) >= 6:
+        os.environ["GITHUB_TOKEN"] = sys.argv[1]
+        os.environ["REPOSITORY"] = sys.argv[2]
+        os.environ["PR_NUMBER"] = sys.argv[3]
+        os.environ["OPENAI_API_KEY"] = sys.argv[4]
+        os.environ["OPENAI_BASE_URL"] = sys.argv[5]
 
-    if not query:
-        print("No query provided. Pass it as CLI args, AGENT_QUERY, or stdin.")
-        return
+    global git, repo
+    git, repo = _build_github_repo()
+
+    pr_number = int(os.getenv("PR_NUMBER", "1"))
+    query = f"Write a review for PR: {pr_number}"
 
     prompt = RichPromptTemplate(query)
 
