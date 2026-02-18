@@ -13,6 +13,7 @@ class Recipe(models.Model):
 
 
 class RecipeRating(models.Model):
+    # Each user can only rate a recipe once, so we use a unique constraint on the combination of recipe and user.
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE, related_name="ratings"
     )
